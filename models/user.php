@@ -60,12 +60,22 @@ class User {
 
     public function save() {
         $q = $this->db->query("UPDATE users SET name='$this->name' WHERE id=$this->id");
-        echo $this->db->error;
         if (!$q) {
             echo 'save failure';
             return FALSE;
         } else {
             echo 'save success';
+            return TRUE;
+        }
+    }
+
+    public function destroy() {
+        $q = $this->db->query("DELETE FROM users WHERE id = $this->id");
+        if (!$q) {
+            echo 'destroy failure';
+            return FALSE;
+        } else {
+            echo 'destroy success';
             return TRUE;
         }
     }

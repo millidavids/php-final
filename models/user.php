@@ -4,6 +4,7 @@ class User {
     public $db;
     public $id;
     public $name;
+    public $errors = array();
 
     private static function getDb() {
         return new mysqli('127.0.0.1:3306', 'homestead', 'secret', 'homestead');
@@ -59,24 +60,45 @@ class User {
     }
 
     public function save() {
-        $q = $this->db->query("UPDATE users SET name='$this->name' WHERE id=$this->id");
-        if (!$q) {
-            echo 'save failure';
+        if(!$this->validate()) {
+            echo "not a valid user:\n";
+            foreach($this->errors as $err) {
+                echo "\t$err\n";
+            }
             return FALSE;
-        } else {
+        }
+        $q = $this->db->query("UPDATE users SET name='$this->name' WHERE id=$this->id");
+        if ($q) {
             echo 'save success';
             return TRUE;
+        } else {
+            echo 'save failure';
+            return FALSE;
         }
     }
 
     public function destroy() {
         $q = $this->db->query("DELETE FROM users WHERE id = $this->id");
-        if (!$q) {
-            echo 'destroy failure';
-            return FALSE;
-        } else {
+        if ($q) {
             echo 'destroy success';
             return TRUE;
+        } else {
+            echo 'destroy failure';
+            return FALSE;
         }
     }
+
+    public function validate() {
+        $this->errors = array();
+        if ($this->name) {
+            return TRUE;
+        } else {
+            array_push($this->errors, 'no name');
+        }
+        return FALSE;
+    }
 }
+
+$user = User::find(5);
+$user->name = NULL;
+$user->save();

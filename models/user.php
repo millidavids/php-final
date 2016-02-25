@@ -98,7 +98,3 @@ class User {
         return FALSE;
     }
 }
-
-$user = User::find(5);
-$user->name = NULL;
-$user->save();

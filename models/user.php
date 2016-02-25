@@ -48,7 +48,7 @@ class User {
             exit;
         }
         if ($q->num_rows === 0) {
-            echo "no match or id $id";
+            echo "no match";
             exit;
         }
         $user_array = array();
@@ -56,5 +56,17 @@ class User {
             array_push($user_array, new User($row->name, $row->id));
         }
         return $user_array;
+    }
+
+    public function save() {
+        $q = $this->db->query("UPDATE users SET name='$this->name' WHERE id=$this->id");
+        echo $this->db->error;
+        if (!$q) {
+            echo 'save failure';
+            return FALSE;
+        } else {
+            echo 'save success';
+            return TRUE;
+        }
     }
 }

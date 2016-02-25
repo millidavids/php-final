@@ -5,23 +5,28 @@ class User {
     public $id;
     public $name;
 
+    private static function getDb() {
+        return new mysqli('127.0.0.1:3306', 'homestead', 'secret', 'homestead');
+    }
+
     private function __construct($name, $id) {
-        $this->db = new mysqli('127.0.0.1:3306', 'homestead', 'secret', 'homestead');
+        $this->db = self::getDb();
         $this->id = $id;
         $this->name = $name;
     }
 
     public static function create($name) {
-        $db = new mysqli('127.0.0.1:3306', 'homestead', 'secret', 'homestead');
-        if ($db->query("INSERT INTO users (name) VALUES ($name)") === TRUE) {
-            return;
-            // LEFT OFF HERE
+        $db = self::getDb();
+        if ($db->query("INSERT INTO users (name) VALUES ('$name')") === TRUE) {
+            return new User($name, $db->insert_id);
+        } else {
+            echo "failed to create user\n";
+            return FALSE;
         }
-
     }
 
     public static function find($id) {
-        $db = new mysqli('127.0.0.1:3306', 'homestead', 'secret', 'homestead');
+        $db = self::getDb();
         $q = $db->query("SELECT * FROM users WHERE id = $id");
         if (!$q) {
             echo 'query error';
@@ -36,7 +41,7 @@ class User {
     }
 
     public static function findAll() {
-        $db = new mysqli('127.0.0.1:3306', 'homestead', 'secret', 'homestead');
+        $db = self::getDb();
         $q = $db->query("SELECT * FROM users");
         if (!$q) {
             echo 'query error';
@@ -53,6 +58,3 @@ class User {
         return $user_array;
     }
 }
-
-$user = User::create('jeff');
-echo $user->name . "\n";

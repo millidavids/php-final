@@ -1,0 +1,6 @@
+Options +FollowSymLinks
+RewriteEngine
+RewriteCond %{REQUEST_URI} !-f
+RewriteCond %{REQUEST_URI} !-d
+RewriteCond %{REQUEST_URI} !-l
+RewriteRule ^(.*)$ index.php?url=QSA,L]

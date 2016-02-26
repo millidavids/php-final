@@ -1,5 +1,9 @@
 <?php
 
+namespace lol;
+
+use mysqli;
+
 class User {
     public $db;
     public $id;
@@ -57,6 +61,10 @@ class User {
             array_push($user_array, new User($row->name, $row->id));
         }
         return $user_array;
+    }
+
+    public static function initialize() {
+        return new User(NULL, NULL);
     }
 
     public function save() {

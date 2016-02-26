@@ -10,17 +10,20 @@ class User {
     public $name;
     public $errors = array();
 
-    private static function getDb() {
+    private static function getDb()
+    {
         return new mysqli('127.0.0.1:3306', 'homestead', 'secret', 'homestead');
     }
 
-    private function __construct($name, $id) {
+    private function __construct($name, $id)
+    {
         $this->db = self::getDb();
         $this->id = $id;
         $this->name = $name;
     }
 
-    public static function create($name) {
+    public static function create($name)
+    {
         $db = self::getDb();
         if ($db->query("INSERT INTO users (name) VALUES ('$name')") === TRUE) {
             return new User($name, $db->insert_id);
@@ -30,7 +33,8 @@ class User {
         }
     }
 
-    public static function find($id) {
+    public static function find($id)
+    {
         $db = self::getDb();
         $q = $db->query("SELECT * FROM users WHERE id = $id");
         if (!$q) {
@@ -45,7 +49,8 @@ class User {
         return new User($row->name, $row->id);
     }
 
-    public static function findAll() {
+    public static function findAll()
+    {
         $db = self::getDb();
         $q = $db->query("SELECT * FROM users");
         if (!$q) {
@@ -63,19 +68,22 @@ class User {
         return $user_array;
     }
 
-    public static function initialize() {
+    public static function initialize()
+    {
         return new User(NULL, NULL);
     }
 
-    public function save() {
-        if(!$this->validate()) {
+    public function save()
+    {
+        if (!$this->validate()) {
             echo "not a valid user:\n";
-            foreach($this->errors as $err) {
+            foreach ($this->errors as $err) {
                 echo "\t$err\n";
             }
             return FALSE;
         }
-        $q = $this->db->query("UPDATE users SET name='$this->name' WHERE id=$this->id");
+        $q_string = "UPDATE users SET name='$this->name' WHERE id=$this->id";
+        $q = $this->db->query($q_string);
         if ($q) {
             echo 'save success';
             return TRUE;
@@ -85,7 +93,8 @@ class User {
         }
     }
 
-    public function destroy() {
+    public function destroy()
+    {
         $q = $this->db->query("DELETE FROM users WHERE id = $this->id");
         if ($q) {
             echo 'destroy success';
@@ -96,7 +105,8 @@ class User {
         }
     }
 
-    public function validate() {
+    public function validate()
+    {
         $this->errors = array();
         if ($this->name) {
             return TRUE;

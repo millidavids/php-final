@@ -5,9 +5,13 @@
         <th>ID</th>
         <th>NAME</th>
     </tr>
-    <?php foreach($users as $user): ?>
+    <?php foreach ($users as $user): ?>
             <tr>
-                <td><a href=<?php echo "/$user->id" ?>><?php echo $user->id ?></a></td>
+                <td>
+                    <a href=<?php echo "/$user->id"; ?>>
+                        <?php echo $user->id ?>
+                    </a>
+                </td>
                 <td><?php echo $user->name ?></td>
             </tr>
     <?php endforeach; ?>

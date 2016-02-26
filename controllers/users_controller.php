@@ -6,13 +6,15 @@ class UsersController
 {
     private $user;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->user = User::initialize();
     }
 
-    public function handleGet() {
+    public function handleGet()
+    {
         $uri = $_SERVER['REQUEST_URI'];
-        switch($uri) {
+        switch ($uri) {
             case '/':
                 $this->index();
                 break;
@@ -30,8 +32,9 @@ class UsersController
 
     }
 
-    public function handlePost() {
-        switch($_GET['method']) {
+    public function handlePost()
+    {
+        switch ($_GET['method']) {
             case 'delete':
                 preg_match('/\d+/', $_SERVER['REQUEST_URI'], $matches);
                 $this->destroy($matches[0]);
@@ -46,54 +49,61 @@ class UsersController
         }
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $user = User::find($id);
         include '../views/users/show.php';
     }
 
-    public function index() {
+    public function index()
+    {
         $users = User::findAll();
         include '../views/users/index.php';
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $user = User::find($id);
         include '../views/users/edit.php';
     }
 
-    public function new() {
+    public function new()
+    {
         include '../views/users/new.php';
     }
 
-    public function create() {
+    public function create()
+    {
         $user = User::initialize();
         $user->name = $_POST['name'];
         if ($user->validate()) {
             $user->save();
             include '../views/users/show.php';
         } else {
-            foreach($user->errors as $err) {
+            foreach ($user->errors as $err) {
                 echo $err."\n";
             }
             include '../views/users/new.php';
         }
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $user = User::find($id);
         $user->name = $_POST['name'];
         if ($user->validate()) {
             $user->save();
             include '../views/users/show.php';
         } else {
-            foreach($user->errors as $err) {
+            foreach ($user->errors as $err) {
                 echo $err."\n";
             }
             include '../views/users/show.php';
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $user = User::find($id);
         $user->destroy();
         $users = User::findAll();
